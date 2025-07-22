@@ -11,9 +11,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-import dj_database_url
-import django_heroku
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,10 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-k%=y^-*kopp3#$7fkgj=mhx6*+g1lfagt*8(#mvuh@@!fdhz)b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = True
 
-
-ALLOWED_HOSTS = ["https://car-inventory-api-vm8r.onrender.com"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -93,9 +89,15 @@ WSGI_APPLICATION = 'car_inventory_system.wsgi.application'
 #     }
 # }
 DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'carInventory',
+        'USER': 'favour',
+        'PASSWORD': 'favourdb',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 }
-
 
 
 # Password validation
@@ -125,7 +127,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
-        'rest_framework.parsers.MultiPartParser',  # ✅ Required for file uploads
+        'rest_framework.parsers.MultiPartParser',  
         'rest_framework.parsers.FormParser',
     ],
 }
@@ -157,11 +159,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 MEDIA_ROOT = BASE_DIR /'media'
 MEDIA_URL = '/media/'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-django_heroku.settings(locals())
